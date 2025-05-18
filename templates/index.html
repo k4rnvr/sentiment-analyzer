@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sentiment Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: auto;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f1f1f1;
+            border-radius: 10px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 50px;
+            background-color: #f0f0f0;
+            font-size: 14px;
+            color: #666;
+        }
+
+        footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Sentiment Analyzer</h1>
+    <form id="sentimentForm">
+        <textarea name="text" rows="5" placeholder="Enter your text here..." required></textarea>
+        <button type="submit">Analyze</button>
+    </form>
+
+    <div id="result">
+        <h3>Sentiment Scores:</h3>
+        <p><strong>Positive:</strong> <span id="pos"></span></p>
+        <p><strong>Negative:</strong> <span id="neg"></span></p>
+        <p><strong>Neutral:</strong> <span id="neu"></span></p>
+        <p><strong>Compound:</strong> <span id="compound"></span></p>
+    </div>
+</div>
+
+<footer>
+    Built by <strong>Karan Veer Singh</strong> | <a href="https://www.linkedin.com/in/karan-veer-singh-655331264/" target="_blank">LinkedIn</a>
+</footer>
+
+<script>
+    const form = document.getElementById('sentimentForm');
+    const resultBox = document.getElementById('result');
+    const posSpan = document.getElementById('pos');
+    const negSpan = document.getElementById('neg');
+    const neuSpan = document.getElementById('neu');
+    const compSpan = document.getElementById('compound');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch('/analyze', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+        posSpan.textContent = data.pos;
+        negSpan.textContent = data.neg;
+        neuSpan.textContent = data.neu;
+        compSpan.textContent = data.compound;
+        resultBox.style.display = 'block';
+    });
+</script>
+
+</body>
+</html>
